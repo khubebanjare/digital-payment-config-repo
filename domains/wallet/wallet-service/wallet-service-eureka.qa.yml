@@ -1,0 +1,11 @@
+# Wallet Service - Eureka QA Configuration
+server:
+  port: 8082
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://eureka-qa:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true

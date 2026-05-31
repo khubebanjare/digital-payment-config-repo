@@ -1,0 +1,5 @@
+# Fraud Service - Kubernetes Prod Configuration
+spring:
+  kubernetes:
+    discovery:
+      enabled: true

@@ -1,0 +1,11 @@
+# Config Server - Kubernetes Dev Configuration
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_REPO_URI:https://github.com/org/config-repo.git}
+          default-label: main
+  kubernetes:
+    discovery:
+      enabled: true

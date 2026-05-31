@@ -1,0 +1,5 @@
+# Wallet Service - Kubernetes Dev Configuration
+spring:
+  kubernetes:
+    discovery:
+      enabled: true

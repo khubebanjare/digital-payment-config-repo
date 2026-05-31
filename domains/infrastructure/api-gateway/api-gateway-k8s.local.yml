@@ -1,0 +1,11 @@
+# API Gateway - Kubernetes Local Configuration
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+  kubernetes:
+    discovery:
+      enabled: true

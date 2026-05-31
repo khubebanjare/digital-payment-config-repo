@@ -1,0 +1,5 @@
+# Notification Service - Kubernetes QA Configuration
+spring:
+  kubernetes:
+    discovery:
+      enabled: true
