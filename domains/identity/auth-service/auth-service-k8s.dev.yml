@@ -5,8 +5,8 @@ spring:
       enabled: true
   datasource:
     url: jdbc:postgresql://postgres-service:5432/auth_service_k8s_db
-    username: khube
-    password: khube
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
 
     jpa:
