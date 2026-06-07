@@ -49,6 +49,7 @@ server:
 
 logging:
   level:
+    root: INFO
     com.digitalpayment.auth: INFO
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
