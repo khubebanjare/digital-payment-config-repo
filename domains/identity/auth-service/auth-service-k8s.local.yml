@@ -10,16 +10,6 @@ server:
     accept-count: 100
 
 spring:
-  cloud:
-    vault:
-      uri: http://localhost:8200
-      token: root
-
-      kv:
-        enabled: true
-        backend: secret
-        default-context: dev/auth-service
-
   kubernetes:
     discovery:
       enabled: true
