@@ -13,7 +13,11 @@ spring:
   cloud:
     vault:
       uri: http://localhost:8200
+      host: localhost
+      port: 8200
+      scheme: http
       token: root
+      kv-version: 1
 
       kv:
         enabled: true
