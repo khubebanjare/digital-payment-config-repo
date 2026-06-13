@@ -12,17 +12,19 @@ server:
 spring:
   cloud:
     vault:
-      uri: http://localhost:8200
       host: localhost
       port: 8200
       scheme: http
-      token: root
-      kv-version: 1
+      token: 0000-0000-0000-0000
 
       kv:
         enabled: true
-        backend: secret
-        default-context: dev/auth-service
+        backend: kv
+        default-context: credentials
+
+  config:
+    import:
+      - optional:vault://
 
   kubernetes:
     discovery:
@@ -30,8 +32,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/auth_k8s_db
-    username: postgres
-    password: postgres
+    username: ${db.username}
+    password: ${db.password}
     driver-class-name: org.postgresql.Driver
 
     hikari:
