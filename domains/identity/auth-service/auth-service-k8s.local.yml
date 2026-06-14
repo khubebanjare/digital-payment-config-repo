@@ -15,7 +15,7 @@ spring:
       host: localhost
       port: 8200
       scheme: http
-      token: 0000-0000-0000-0000
+      token: hvs.IB7RvtNwphgLco9dZA3icKf7
 
       kv:
         enabled: true
