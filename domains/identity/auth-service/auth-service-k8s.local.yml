@@ -63,9 +63,6 @@ spring:
     show-sql: false
 
 logging:
-  file:
-    name: logs/auth-service.log
-
   level:
     root: INFO
     com.digitalpayment.auth: DEBUG
