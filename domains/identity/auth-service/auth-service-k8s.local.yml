@@ -65,26 +65,34 @@ spring:
 logging:
   file:
     name: logs/auth-service.log
+
   level:
     root: INFO
-    com.digitalpayment.auth: INFO
-    org.springframework.security: WARN
+    com.digitalpayment.auth: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
     org.hibernate.SQL: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.hibernate.type.descriptor.sql: WARN
 
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] [%X{service:-auth-service}] %logger{36} - %msg%n"
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+          - env
 
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: always
+
     prometheus:
       enabled: true
 
@@ -92,6 +100,26 @@ management:
     db:
       enabled: true
 
-  sql:
-    init:
-      mode: always
+  tracing:
+    enabled: true
+
+    sampling:
+      probability: 1.0
+
+  observations:
+    annotations:
+      enabled: true
+
+  metrics:
+    tags:
+      service: auth-service
+      team: banking
+      environment: k8s-local
+
+  otlp:
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
+
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
