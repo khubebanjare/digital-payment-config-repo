@@ -76,6 +76,9 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] [%X{service:-auth-service}] %logger{36} - %msg%n"
 
 management:
+  otlp:
+    logging:
+      endpoint: http://localhost:4318/v1/logs
   endpoints:
     web:
       exposure:
@@ -113,16 +116,17 @@ management:
       team: banking
       environment: k8s-local
 
-  otlp:
+  otel:
+    service:
+      name: auth-service
     logs:
       exporter: otlp
     exporter:
       otlp:
         protocol: http
         endpoint: http://localhost:4318
-        url: http://localhost:4318/v1/logs
-    tracing:
-      endpoint: http://localhost:4318/v1/traces
+        logs:
+          endpoint: http://localhost:4318/v1/logs
 
     metrics:
       export:
