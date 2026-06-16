@@ -1,49 +1,144 @@
-## API Gateway - Kubernetes Local Configuration
-#server:
-#  port: 8082
-#  tomcat:
-#    threads:
-#      max: 200
-#      min-spare: 10
-#    connection-timeout: 20000
-#    max-connections: 8192
-#    accept-count: 100
-#
-#spring:
-#  cloud:
-#    vault:
-#      host: localhost
-#      port: 8200
-#      scheme: http
-#      token: hvs.IB7RvtNwphgLco9dZA3icKf7
-#
-#      kv:
-#        enabled: true
-#        backend: kv
-#        default-context: credentials
-#
-#  config:
-#    import:
-#      - optional:vault://
-#
-#    gateway:
-#      routes:
-#        - id: auth-service
-#          uri: lb://AUTH-SERVICE
-#          predicates:
-#            - Path=/api/auth/**
-#          filters:
-#            - name: RequestRateLimiter
-#              args:
-#                key-resolver: "#{@userKeyResolver}"
-#                redis-rate-limiter.replenishRate: 10
-#                redis-rate-limiter.burstCapacity: 20
-#
-#  data:
-#    redis:
-#      host: localhost
-#      port: 6379
-#
-#  kubernetes:
-#    discovery:
-#      enabled: true
+# API Gateway - Kubernetes Local Configuration
+server:
+  port: 8082
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    connection-timeout: 20000
+    max-connections: 8192
+    accept-count: 100
+
+spring:
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      token: hvs.IB7RvtNwphgLco9dZA3icKf7
+
+      kv:
+        enabled: true
+        backend: kv
+        default-context: credentials
+
+  config:
+    import:
+      - optional:vault://
+
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userKeyResolver}"
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+
+  kubernetes:
+    discovery:
+      enabled: true
+
+    datasource:
+      url: jdbc:postgresql://localhost:5432/api_gateway_k8s_db
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
+      driver-class-name: org.postgresql.Driver
+
+      hikari:
+        maximum-pool-size: 20
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        connection-test-query: SELECT 1
+        pool-name: AuthServiceHikariCP
+
+    jpa:
+      hibernate:
+        ddl-auto: update
+        show-sql: true
+        properties:
+          hibernate:
+            format_sql: true
+
+      properties:
+        hibernate:
+          jdbc:
+            batch_size: 20
+          order_inserts: true
+          order_updates: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: false
+
+  logging:
+    level:
+      root: INFO
+      com.digitalpayment.auth: DEBUG
+      org.springframework.security: INFO
+      org.springframework.web: INFO
+      org.hibernate.SQL: WARN
+      org.hibernate.type.descriptor.sql: WARN
+
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+      file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] [%X{service:-auth-service}] %logger{36} - %msg%n"
+
+  # ── Micrometer OTLP registry (metrics)
+  management:
+    endpoints:
+      web:
+        exposure:
+          include:
+            - health
+            - info
+            - metrics
+            - prometheus
+            - env
+    otlp:
+      metrics:
+        export:
+          enabled: true
+          url: ${grafana.otlp.endpoint}/v1/metrics
+          headers:
+            Authorization: ${grafana.otlp.auth}
+          step: 30s
+      tracing:
+        endpoint: ${grafana.otlp.endpoint}/v1/traces
+        headers:
+          Authorization: ${grafana.otlp.auth}
+        enabled: true
+      logging:
+        endpoint: ${grafana.otlp.endpoint}/v1/logs
+        headers:
+          Authorization: ${grafana.otlp.auth}
+
+        tracing:
+          sampling:
+            probability: 1.0
+
+      # ── OTel SDK autoconfiguration (logs + traces via opentelemetry-exporter-otlp) ─
+      exporter:
+        otlp:
+          endpoint: ${grafana.otlp.endpoint}
+          headers: "Authorization=${grafana.otlp.auth}"
+        resource:
+          attributes: "service.name=auth-service,service.namespace=digital-banking"
+        logs:
+          exporter: otlp
+        traces:
+          exporter: otlp
+        metrics:
+          exporter: none   # micrometer-registry-otlp handles metrics; avoid double-export
+
+    endpoint:
+      health:
+        show-details: always
+  data:
+    redis:
+      host: localhost
+      port: 6379
