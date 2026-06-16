@@ -1,17 +1,16 @@
 # API Gateway - Kubernetes Local Configuration
 spring:
   cloud:
-    cloud:
-      vault:
-        host: localhost
-        port: 8200
-        scheme: http
-        token: hvs.IB7RvtNwphgLco9dZA3icKf7
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      token: hvs.IB7RvtNwphgLco9dZA3icKf7
 
-        kv:
-          enabled: true
-          backend: kv
-          default-context: credentials
+      kv:
+        enabled: true
+        backend: kv
+        default-context: credentials
 
   config:
     import:
