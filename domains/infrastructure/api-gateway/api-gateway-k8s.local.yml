@@ -1,4 +1,15 @@
 # API Gateway - Kubernetes Local Configuration
+# Auth Service - Kubernetes Local Configuration
+server:
+  port: 8082
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    connection-timeout: 20000
+    max-connections: 8192
+    accept-count: 100
+
 spring:
   cloud:
     vault:
