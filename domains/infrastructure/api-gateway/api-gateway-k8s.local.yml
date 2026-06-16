@@ -1,50 +1,49 @@
-# API Gateway - Kubernetes Local Configuration
-# Auth Service - Kubernetes Local Configuration
-server:
-  port: 8082
-  tomcat:
-    threads:
-      max: 200
-      min-spare: 10
-    connection-timeout: 20000
-    max-connections: 8192
-    accept-count: 100
-
-spring:
-  cloud:
-    vault:
-      host: localhost
-      port: 8200
-      scheme: http
-      token: hvs.IB7RvtNwphgLco9dZA3icKf7
-
-      kv:
-        enabled: true
-        backend: kv
-        default-context: credentials
-
-  config:
-    import:
-      - optional:vault://
-
-    gateway:
-      routes:
-        - id: auth-service
-          uri: lb://AUTH-SERVICE
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                key-resolver: "#{@userKeyResolver}"
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-  kubernetes:
-    discovery:
-      enabled: true
+## API Gateway - Kubernetes Local Configuration
+#server:
+#  port: 8082
+#  tomcat:
+#    threads:
+#      max: 200
+#      min-spare: 10
+#    connection-timeout: 20000
+#    max-connections: 8192
+#    accept-count: 100
+#
+#spring:
+#  cloud:
+#    vault:
+#      host: localhost
+#      port: 8200
+#      scheme: http
+#      token: hvs.IB7RvtNwphgLco9dZA3icKf7
+#
+#      kv:
+#        enabled: true
+#        backend: kv
+#        default-context: credentials
+#
+#  config:
+#    import:
+#      - optional:vault://
+#
+#    gateway:
+#      routes:
+#        - id: auth-service
+#          uri: lb://AUTH-SERVICE
+#          predicates:
+#            - Path=/api/auth/**
+#          filters:
+#            - name: RequestRateLimiter
+#              args:
+#                key-resolver: "#{@userKeyResolver}"
+#                redis-rate-limiter.replenishRate: 10
+#                redis-rate-limiter.burstCapacity: 20
+#
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#
+#  kubernetes:
+#    discovery:
+#      enabled: true
