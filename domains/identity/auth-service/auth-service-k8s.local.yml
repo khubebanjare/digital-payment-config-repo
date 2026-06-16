@@ -75,10 +75,8 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] [%X{service:-auth-service}] %logger{36} - %msg%n"
 
+# ── Micrometer OTLP registry (metrics)
 management:
-  otlp:
-    logging:
-      endpoint: http://localhost:4318/v1/logs
   endpoints:
     web:
       exposure:
@@ -88,47 +86,34 @@ management:
           - metrics
           - prometheus
           - env
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: ${grafana.otlp.endpoint}/v1/metrics
+        headers:
+          Authorization: ${grafana.otlp.auth}
+        step: 30s
+    tracing:
+      endpoint: ${grafana.otlp.endpoint}/v1/traces
+      headers:
+        Authorization: ${grafana.otlp.auth}
+      enabled: true
+
+  # ── OTel SDK autoconfiguration (logs + traces via opentelemetry-exporter-otlp) ─
+    exporter:
+      otlp:
+        endpoint: ${grafana.otlp.endpoint}
+        headers: "Authorization=${grafana.otlp.auth}"
+      resource:
+        attributes: "service.name=auth-service,service.namespace=digital-banking"
+      logs:
+        exporter: otlp
+      traces:
+        exporter: otlp
+      metrics:
+        exporter: none   # micrometer-registry-otlp handles metrics; avoid double-export
 
   endpoint:
     health:
       show-details: always
-
-    prometheus:
-      enabled: true
-
-  health:
-    db:
-      enabled: true
-
-  tracing:
-    endpoint: http://localhost:4318/v1/traces
-    enabled: true
-
-    sampling:
-      probability: 1.0
-
-  observations:
-    annotations:
-      enabled: true
-
-  metrics:
-    tags:
-      service: auth-service
-      team: banking
-      environment: k8s-local
-
-  otel:
-    service:
-      name: auth-service
-    logs:
-      exporter: otlp
-    exporter:
-      otlp:
-        protocol: http
-        endpoint: http://localhost:4318
-        logs:
-          endpoint: http://localhost:4318/v1/logs
-
-    metrics:
-      export:
-        url: http://localhost:4318/v1/metrics
