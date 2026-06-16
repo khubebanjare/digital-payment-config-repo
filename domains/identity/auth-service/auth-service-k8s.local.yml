@@ -99,8 +99,16 @@ management:
       headers:
         Authorization: ${grafana.otlp.auth}
       enabled: true
+    logging:
+      endpoint: ${grafana.otlp.endpoint}/v1/logs
+      headers:
+        Authorization: ${grafana.otlp.auth}
 
-  # ── OTel SDK autoconfiguration (logs + traces via opentelemetry-exporter-otlp) ─
+      tracing:
+        sampling:
+          probability: 1.0
+
+    # ── OTel SDK autoconfiguration (logs + traces via opentelemetry-exporter-otlp) ─
     exporter:
       otlp:
         endpoint: ${grafana.otlp.endpoint}
