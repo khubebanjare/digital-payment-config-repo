@@ -62,6 +62,18 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: info.khube@gmail.com
+    password: ${spring.mail.password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 logging:
   level:
     root: INFO
