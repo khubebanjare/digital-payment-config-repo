@@ -74,7 +74,7 @@ spring:
             enable: true
           auth: true
           starttls:
-            enable: true
+            enable: false
 
 logging:
   level:
