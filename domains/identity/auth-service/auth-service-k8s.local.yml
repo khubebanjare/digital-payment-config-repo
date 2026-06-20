@@ -65,8 +65,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${khube.mail}
-    password: ${khube.mail.password}
+    username: ${app.mail}
+    password: ${app.mail.password}
     properties:
       mail:
         smtp:
