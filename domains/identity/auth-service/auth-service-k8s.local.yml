@@ -64,7 +64,7 @@ spring:
 
   mail:
     host: smtp.titan.email
-    port: 587
+    port: 465
     username: ${khube.mail}
     password: ${khube.mail.password}
     properties:
