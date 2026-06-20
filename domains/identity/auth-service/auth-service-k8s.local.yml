@@ -63,7 +63,7 @@ spring:
     show-sql: false
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.titan.email
     port: 587
     username: ${khube.mail}
     password: ${khube.mail.password}
