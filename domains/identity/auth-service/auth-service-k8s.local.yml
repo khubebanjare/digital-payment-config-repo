@@ -80,6 +80,8 @@ logging:
     com.digitalpayment.auth: DEBUG
     org.springframework.security: INFO
     org.springframework.web: INFO
+    org.springframework.cloud.vault: DEBUG
+    org.springframework.cloud.gateway: TRACE
     org.hibernate.SQL: WARN
     org.hibernate.type.descriptor.sql: WARN
 
