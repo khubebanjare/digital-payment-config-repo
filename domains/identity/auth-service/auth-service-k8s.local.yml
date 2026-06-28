@@ -92,6 +92,10 @@ logging:
 # ── Micrometer OTLP registry (metrics)
 management:
   endpoints:
+    health:
+      show-details: always
+      probs:
+        enabled: true
     web:
       exposure:
         include:
@@ -135,7 +139,3 @@ management:
         exporter: otlp
       metrics:
         exporter: none   # micrometer-registry-otlp handles metrics; avoid double-export
-
-  endpoint:
-    health:
-      show-details: always
