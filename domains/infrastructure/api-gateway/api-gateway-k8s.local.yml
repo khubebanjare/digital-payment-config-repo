@@ -92,6 +92,10 @@ logging:
 # ── Micrometer OTLP registry (metrics)
 management:
   endpoints:
+    health:
+      show-details: always
+      probs:
+        enabled: true
     web:
       exposure:
         include:
