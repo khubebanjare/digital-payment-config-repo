@@ -32,7 +32,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/auth_k8s_dev_db
+    url: jdbc:postgresql://postgres:5432/auth_k8s_db
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
