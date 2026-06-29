@@ -28,7 +28,7 @@ spring:
       host: vault
       port: 8200
       scheme: http
-      token: hvs.IB7RvtNwphgLco9dZA3icKf7
+      token: hvs.uLmylBBZDEw5nPKfqPW62Q7D
 
       kv:
         enabled: true
