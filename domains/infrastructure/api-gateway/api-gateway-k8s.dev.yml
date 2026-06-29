@@ -92,11 +92,12 @@ logging:
 
 # ── Micrometer OTLP registry (metrics)
 management:
-  endpoints:
+  endpoint:
     health:
       show-details: always
-      probs:
+      probes:
         enabled: true
+  endpoints:
     web:
       exposure:
         include:
@@ -141,9 +142,6 @@ management:
       metrics:
         exporter: none   # micrometer-registry-otlp handles metrics; avoid double-export
 
-  endpoint:
-    health:
-      show-details: always
 jwt:
   expiration: 86400000
   refresh-expiration: 604800000
